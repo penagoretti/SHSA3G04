@@ -158,10 +158,10 @@
 Suppose we are interested in assessing the prevalence of workers being exposed to high
 levels of a pollutant in a factory. A worker has an acceptable exposure level if the measure
 of the variable $X$ is not higher than $x_{0} = 2.95$. In this factory, previous studies have
-estimated that $95\% of workers have acceptable levels of the pollutant. A new security
+estimated that $95\%$ of workers have acceptable levels of the pollutant. A new security
 protocol has been implemented in the factory. Some months after the implementation we
 are interested in know if the percentage of workers with acceptable levels of the pollutant
-is still the same (i.e. $95\%). To decide, we randomly select a sample of 20 workers resulting
+is still the same (i.e. $95\%$). To decide, we randomly select a sample of 20 workers resulting
 in the data stored in the file \Robject{factory.RData}.
 
 \begin{enumerate}
