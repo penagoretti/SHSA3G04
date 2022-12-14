@@ -1,0 +1,234 @@
+\documentclass[10pt,a4paper,twoside]{article}
+
+%%% Load some LaTeX packages:
+  \usepackage[utf8]{inputenc}
+\usepackage[nottoc]{tocbibind}      % for bibliography in the table of contents
+\usepackage{hyperref}                      % link to website: \url{}.
+\usepackage[hang,footnotesize,bf]{caption} % customized caption
+\usepackage{amsmath}                       % for mathematical features 
+\usepackage[left=2.5cm,top=3cm,bottom=3cm,right=2.5cm]{geometry}   % text margins
+\usepackage{booktabs}                      % for booktabs in print(xtable)).
+\usepackage{authblk}                       % for footnote style author/affiliation
+\usepackage{parskip}
+\usepackage{dsfont}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{cancel}
+\usepackage{nccmath}
+\usepackage{geometry}
+\usepackage{amsfonts} 
+\usepackage{bbm}
+\floatplacement{figure}{H}
+
+
+
+
+%%% Some LaTeX "macros":
+  \newcommand{\R}{\textsf{R}}
+\newcommand{\Rpackage}[1]{\textsf{#1}}
+  \newcommand{\Robject}[1]{\texttt{#1}}
+    \newcommand*{\QEDB}{\null\nobreak\hfill\ensuremath{\blacksquare}}
+    
+    
+    <<libraries, include=FALSE>>=
+      ### libraries used:
+      library(knitr)
+    library(highlight)  # to highlight R output
+    library(xtable)     # to export R output tables to LaTeX
+    library(here)
+    library(mice)
+    library(plotrix)
+    library(epitools)
+    library(kableExtra)
+    
+    set.seed(1936)
+    @
+      
+      
+      <<setting, include=FALSE, purl=FALSE>>=
+      ### output options (there are a lot..):
+      options(
+        width = 90, # max. width, in characters, of the R output. Default is 80.
+        scipen = 4,# to avoid printing inline R output numbers in scientific
+        # notation if they are lower than 10^4
+        digits = 2
+      )
+    
+    ### set global chunk options. They apply to all chunks except to those in which
+    ### you set otherwise
+    opts_chunk$set(
+      echo = TRUE,         # don't show R input code
+      message = TRUE,       # set to FALSE to avoid nuisance messages (be careful!)         
+      warning = TRUE,       # set to FALSE to avoid nuisance messages (be careful!)         
+      size = "footnotesize", # set the R output and output font size 
+      cache = FALSE,          # useful for computationally costly chunks (be careful!)
+      prompt = TRUE
+    )
+    @
+      
+      
+      \begin{document}
+    
+    
+    \begin{titlepage}
+    \begin{center}
+    %{\includegraphics[width=0.5\textwidth]{logo}\par}
+    %\vspace{1cm}
+    \LARGE
+    {Universitat Aut\`{o}noma de Barcelona \par}
+    
+    \vspace{1cm}
+    
+    \Large
+    \scshape{Facultat de Ci\`{e}ncies \par}
+    
+    \vspace{3cm}
+    
+    \Huge
+    \bfseries{{Assignment 3 \par}}
+    
+    \vspace{1cm}
+    
+    \Huge
+    \scshape{Hypothesis testing \par}
+    \vfill
+    
+    \vspace{2cm}
+    
+    \Large
+    \scshape{Statistics in Health Sciences \par}
+    \vfill
+    
+    \vspace{2cm}
+    
+    \Large
+    {Sergi Cant\'{o}n Sim\'{o} - 1569251 \par}
+    \Large
+    {C\`{e}lia Mart\'{i}nez Frago - 1569504 \par}
+    \Large 
+    {Goretti Pena Lorente - 1566866 \par}
+    \Large 
+    {Guillermo Raya Garc\'{i}a - 1568864 \par}
+  
+    \Large 
+    {Assignment identifier: A3 \par}
+  
+    \Large 
+    {Group identifier: G04 \par}
+  
+    \vspace{1cm}
+    \Large
+    {30/12/2022 \par}
+  
+    \vfill
+    \date{}
+  
+    \end{center}
+\end{titlepage}
+
+%\maketitle
+
+%\thispagestyle{empty}
+
+
+%%%%%%%%%%%%%%%
+%%%
+%%% Table of contents
+%%%
+%%%%%%%%%%%%%%%
+\clearpage
+\tableofcontents
+\clearpage
+
+\pagenumbering{arabic}
+
+
+
+%%%%%%%%%%%%%%%
+%%%
+%%% Section: Pollutant exposure in a factory
+%%%
+%%%%%%%%%%%%%%%
+\section{Pollutant exposure in a factory}
+\label{sec:pollutant}
+Suppose we are interested in assessing the prevalence of workers being exposed to high
+levels of a pollutant in a factory. A worker has an acceptable exposure level if the measure
+of the variable $X$ is not higher than $x_{0} = 2.95$. In this factory, previous studies have
+estimated that $95\% of workers have acceptable levels of the pollutant. A new security
+protocol has been implemented in the factory. Some months after the implementation we
+are interested in know if the percentage of workers with acceptable levels of the pollutant
+is still the same (i.e. $95\%). To decide, we randomly select a sample of 20 workers resulting
+in the data stored in the file \Robject{factory.RData}.
+
+\begin{enumerate}
+  \item State clearly the hypothesis test.
+  \item Compute teh $p$-value based on the exact distribution of the data under the null hypothesis, using each of the following methods:
+  \begin{enumerate}
+    \item  By hand (i.e. obtaining the mathematical expression for the $p$-value and then
+computing its numerical value using \textsf{R} as a simple calculator). Show all your
+derivations and your \textsf{R} code.
+    \item Using the probability distributions in \textsf{R} (i.e. implementing the calculation of
+the $p$-value in an \textsf{R} script, using the proper existing probability function \footnote{
+https://cran.r-project.org/web/views/Distributions.html}).
+Show your \textsf{R} script and the output.
+  \end{enumerate}
+  \item Compute the $p$-value based on the approximated asymptotic distribution of the data
+under the null hypothesis, using each of the following methods:
+  \begin{enumerate}
+    \item By hand (i.e. obtaining the mathematical expression for the $p$-value and then
+using a statistical table for the distribution of interest). Show all your derivations and your \textsf{R} code.
+    \item Using the probability distributions in \textsf{R} (i.e. implementing the calculation of
+the $p$-value in an \textsf{R} script, using the proper existing probability function). Show
+your \textsf{R} script and the output.
+  \end{enumerate}
+  \item Compare results and discuss (in no more than 10 lines).
+\end{enumerate}
+
+
+
+
+%%%%%%%%%%%%%%%
+%%%
+%%% Section: Error when using extest2by2
+%%%
+%%%%%%%%%%%%%%%
+\section{Error when using \Robject{extest2by2}}
+\label{sec:error}
+Solve Exercise 3 in slides \Robject{SHS 10 Decision making.pdf}.
+
+
+
+
+
+%%%%%%%%%%%%%%%
+%%%
+%%% Section: On the impact of the study design on the p-value for association in contingency tables
+%%%
+%%%%%%%%%%%%%%%
+\section{On the impact of the study design on the $p$-value for association in contingency tables}
+Solve Exercise 4 in slides \Robject{SHS 10 Decision making.pdf}.
+
+
+
+
+%%%%%%%%%%%%%%%
+%%%
+%%% Appendix
+%%%
+%%%%%%%%%%%%%%%
+\clearpage
+
+
+\appendix
+\section{R code}
+\label{app:Rcode}
+
+
+
+
+
+\end{document}
