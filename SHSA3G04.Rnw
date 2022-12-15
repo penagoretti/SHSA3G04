@@ -172,8 +172,8 @@ in the data stored in the file \Robject{factory.RData}.
 computing its numerical value using \textsf{R} as a simple calculator). Show all your
 derivations and your \textsf{R} code.
     \item Using the probability distributions in \textsf{R} (i.e. implementing the calculation of
-the $p$-value in an \textsf{R} script, using the proper existing probability function \footnote{
-https://cran.r-project.org/web/views/Distributions.html}).
+the $p$-value in an \textsf{R} script, using the proper existing probability function \footnote{\url{
+https://cran.r-project.org/web/views/Distributions.html}}).
 Show your \textsf{R} script and the output.
   \end{enumerate}
   \item Compute the $p$-value based on the approximated asymptotic distribution of the data
