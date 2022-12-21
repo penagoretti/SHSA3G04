@@ -166,7 +166,26 @@ in the data stored in the file \Robject{factory.RData}.
 
 \begin{enumerate}
   \item State clearly the hypothesis test.
-  \item Compute teh $p$-value based on the exact distribution of the data under the null hypothesis, using each of the following methods:
+  \begin{itemize}
+    \item \textbf{Step 1.} State the hypothesis test and set the significance level.\\
+    Define $H_{0}$ and $H_{1}$:
+    \begin{equation}
+        \begin{cases} \text{$H_{0}$:} & \mbox{The prevalence of workers that have acceptable levels of pollutant is 0.95} \\ \text{$H_{1}$:} & \mbox{The prevalence of workers that have acceptable levels of pollutant is not 0.95} \end{cases}\\
+\end{equation}
+    We are going to translate the hypothesis statement into mathematical language:
+    \begin{equation}
+        \begin{cases} \text{$H_{0}$:} & \mbox{$P(E) = 0.95$} \\ \text{$H_{1}$:} & \mbox{$P(E) \not= 0.95$} \end{cases}\\
+    \end{equation}
+    We set the significance level, for instance, as usual, $\alpha$ = 0.05.
+    \item \textbf{Step 2.} Carry out the experiment and obtain the data.\\
+    In the sample of size $n = 20$, the number of workers that have acceptable levels of pollutant is $k = 20$.
+    \item \textbf{Step 3.} Compute and interpret a measure of distance related to the hypothesis to be contrasted.\\
+    Prevalence of workers that have acceptable levels of pollutant can be estimated as:
+    \begin{equation}
+      \widehat{P(E)} = \frac{k}{n} = \frac{20}{20} = 1
+    \end{equation}
+  \end{itemize}
+  \item Compute the $p$-value based on the exact distribution of the data under the null hypothesis, using each of the following methods:
   \begin{enumerate}
     \item  By hand (i.e. obtaining the mathematical expression for the $p$-value and then
 computing its numerical value using \textsf{R} as a simple calculator). Show all your
