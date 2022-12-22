@@ -211,6 +211,7 @@ P_e = k/n
     \label{eq:prevalence}
       \widehat{P(E)} = \frac{k}{n} = \frac{\Sexpr{k}}{\Sexpr{n}} = \Sexpr{P_e}
     \end{equation}
+    We can see that this estimation is higher than the hypothetical value under the null hypothesis, which is 0.95. This discrepancy could be due to the fact that the prevalence of workers that have acceptable levels of pollutant is not the same in both populations. However, it could also be due just to sampling error.
   \end{itemize}
   \item Compute the $p$-value based on the exact distribution of the data under the null hypothesis, using each of the following methods:
   \begin{enumerate}
