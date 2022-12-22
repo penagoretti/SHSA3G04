@@ -182,6 +182,7 @@ in the data stored in the file \Robject{factory.RData}.
     \item \textbf{Step 3.} Compute and interpret a measure of distance related to the hypothesis to be contrasted.\\
     Prevalence of workers that have acceptable levels of pollutant can be estimated as:
     \begin{equation}
+    \label{eq:prevalence}
       \widehat{P(E)} = \frac{k}{n} = \frac{20}{20} = 1
     \end{equation}
   \end{itemize}
@@ -200,6 +201,39 @@ under the null hypothesis, using each of the following methods:
   \begin{enumerate}
     \item By hand (i.e. obtaining the mathematical expression for the $p$-value and then
 using a statistical table for the distribution of interest). Show all your derivations and your \textsf{R} code.
+
+    To compute the $p$-value we need to define a random variable related to the measure of distance defined in the equation \eqref{eq:prevalence} and characterize its probability function. Consequently, we define $X$ = "Number of workers with acceptable levels of pollutant in a random sample of size n = 20 from the workers population", so that, 
+    \begin{equation}
+        X \sim \text{Binomial}(n, \pi) \quad \text{and} \quad P(X = k) = {n \choose k } \pi^k · (1 - \pi)^{n-k}, \quad k = 0, ..., n,
+    \end{equation}
+    where $n = 20$ and $\pi$ is the unknown prevalence of workers that have acceptable levels of pollutant.
+    
+    However, we know that, under $\text{H}_0$, $\pi = 0.95$, so,
+    \begin{equation}
+        P(X = k) = {10 \choose k } 0.4^k · 0.6^{10-k}.
+    \end{equation}
+
+    And, also that,
+    \begin{equation}
+        E(X|\text{H}_0) = n·(\pi|\text{H}_0) = 20·0.95 = 19
+    \end{equation}
+    that is to say, we would expect 19 workers that have acceptable levels of pollutant in a random sample of size 20 while we indeed have observed 20 workers that have acceptable levels of pollutant.
+
+    Therefore, results at least as favorable to $\text{H}_1$ than those observed are $|X - X_e| \geq |X_o - X_e| = |20 - 19| = 1$, where $X_o$ and $X_e$ are the observed value in the experiment and the expected value under $\text{H}_0$, respectively, and the $p$-value under asymptotic approximation using the normal distribution is:
+    \begin{equation}
+        X \sim \text{Binomial}(n,\pi) \quad \xRightarrow{\text{asympt.}} \quad \frac{X - n\pi}{\sqrt{n\pi (1 - \pi)}} = Z \sim \mathcal{N}(\mu = 0, \sigma = 1)
+    \end{equation}
+    and applying a continuity correction, so that
+    \begin{equation}
+        \begin{array}{lcllll}
+            p\text{-value} & = & P({X \geq 20} \cup {X \leq 18}|\text{H}_0) &\\
+            & = & P({X \geq 20} \cup {X \leq 18}| X \sim \text{Binomial}(20,0.95)) &\\
+            & \approx & P({X \geq 19.5} \cup {X \leq 18.5}| X \sim \mathcal{N}(\mu = 19, \sigma^2 = 0.95)) &\\
+            & = & P({z \geq \frac{\sqrt{95}}{19}} \cup {z \leq -\frac{\sqrt{95}}{19}}) &\\
+            & = & 2 \phi \left( -\frac{\sqrt{95}}{19} \right) \approx 2·(1-0.69497) = 0.61 
+        \end{array}
+    \end{equation}
+    Hence, since the $p$-value (0.61) is higher than $\alpha$ (0.05), we decide we have not evidence strong enough to reject the null hypothesis under which the prevalence of workers that have acceptable levels of pollutant is 0.95.
     \item Using the probability distributions in \textsf{R} (i.e. implementing the calculation of
 the $p$-value in an \textsf{R} script, using the proper existing probability function). Show
 your \textsf{R} script and the output.
