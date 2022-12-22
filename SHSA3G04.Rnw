@@ -290,6 +290,48 @@ p_value = 2*(1-0.69497)
     \item Using the probability distributions in \textsf{R} (i.e. implementing the calculation of
 the $p$-value in an \textsf{R} script, using the proper existing probability function). Show
 your \textsf{R} script and the output.
+
+To compute the $p$-value we need to define a random variable related to the measure of distance defined in the equation \eqref{eq:prevalence} and characterize its probability function. Consequently, we define $X$ = "Number of workers with acceptable levels of pollutant in a random sample of size n = \Sexpr{n} from the workers population", so that, 
+    \begin{equation}
+        X \sim \text{Binomial}(n, \pi) \quad \text{and} \quad P(X = k) = {n \choose k } \pi^k \cdot (1 - \pi)^{n-k}, \quad k = 0, ..., n,
+    \end{equation}
+    where $n = \Sexpr{n}$ and $\pi$ is the unknown prevalence of workers that have acceptable levels of pollutant.
+    
+    However, we know that, under $\text{H}_0$, $\pi = \Sexpr{P}$, so,
+    \begin{equation}
+        P(X = k) = {\Sexpr{n} \choose k } \Sexpr{P}^k \cdot \Sexpr{1-P}^{\Sexpr{n}-k}.
+    \end{equation}
+
+    And, also that,
+
+    \begin{equation}
+        E(X|\text{H}_0) = n \cdot (\pi|\text{H}_0) = \Sexpr{n} \cdot \Sexpr{P} = \Sexpr{E}
+    \end{equation}
+    that is to say, we would expect \Sexpr{E} workers that have acceptable levels of pollutant in a random sample of size \Sexpr{n} while we indeed have observed \Sexpr{k} workers that have acceptable levels of pollutant.
+
+    Therefore, results at least as favorable to $\text{H}_1$ than those observed are $|X - X_e| \geq |X_o - X_e| = |\Sexpr{k} - \Sexpr{E}| = \Sexpr{D}$, where $X_o$ and $X_e$ are the observed value in the experiment and the expected value under $\text{H}_0$, respectively, and the $p$-value under asymptotic approximation using the normal distribution is:
+    \begin{equation}
+        X \sim \text{Binomial}(n,\pi) \quad \xRightarrow{\text{asympt.}} \quad \frac{X - n\pi}{\sqrt{n\pi (1 - \pi)}} = Z \sim \mathcal{N}(\mu = 0, \sigma = 1)
+    \end{equation}
+    and applying a continuity correction, so that
+<<R_p_value>>=
+
+# p-value
+R_p_value = 2*(pnorm(Z_inf, mean = 0, sd = 1, lower.tail = T))
+
+@
+    \begin{equation}
+        \begin{array}{lcllll}
+            p\text{-value} & = & P({X \geq \Sexpr{E + D}} \cup {X \leq \Sexpr{E - D}}|\text{H}_0) &\\
+            & = & P({X \geq \Sexpr{E + D}} \cup {X \leq \Sexpr{E - D}}| X \sim \text{Binomial}(\Sexpr{n},\Sexpr{P})) &\\
+            & \approx & P({X \geq \Sexpr{sup}} \cup {X \leq \Sexpr{inf}}| X \sim \mathcal{N}(\mu = \Sexpr{mu}, \sigma^2 = \Sexpr{sd})) &\\
+            & = & P({z \geq \Sexpr{Z_sup}} \cup {z \leq \Sexpr{Z_inf}}) &\\
+            & = & 2 \cdot \phi \left( \Sexpr{Z_inf} \right) \approx 2·(1-0.69497) = \Sexpr{R_p_value}
+        \end{array}
+    \end{equation}
+    Hence, since the $p$-value (\Sexpr{p_value}) is higher than $\alpha$ (\Sexpr{alpha}), we decide we have not evidence strong enough to reject the null hypothesis under which the prevalence of workers that have acceptable levels of pollutant is \Sexpr{P}.
+
+
   \end{enumerate}
   \item Compare results and discuss (in no more than 10 lines).
 \end{enumerate}
