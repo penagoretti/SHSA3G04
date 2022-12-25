@@ -1,3 +1,4 @@
+
 \documentclass[10pt,a4paper,twoside]{article}
 
 %%% Load some LaTeX packages:
@@ -167,7 +168,7 @@ in the data stored in the file \Robject{factory.RData}.
 <<data>>=
     
 ### loading data and obtaining the necessary information
-load('factory.RData')
+load('./factory.RData')
 
 # Number of workers in the sample randomly selected
 n = length(factory$worker)
@@ -360,6 +361,40 @@ Solve Exercise 3 in slides \Robject{SHS 10 Decision making.pdf}.
 %%%%%%%%%%%%%%%
 \section{On the impact of the study design on the $p$-value for association in contingency tables}
 Solve Exercise 4 in slides \Robject{SHS 10 Decision making.pdf}.
+
+\begin{enumerate}
+
+\item Apply \Robject{extest2by2} to data on Example 2 but now using the OR as measure of association. Report the $p$-value.
+
+<<p_value_cross-sectional>>=
+source("./extest2by2.R")
+
+test1 <- extest2by2(n1 = m1, n2 = m2, n3 = m3, n4 = m4,
+                    design = "crosssectional",
+                    measure = "or",
+                    alternative = "greater")
+@
+
+The $p$-value using a cross-sectional design is \Sexpr{test1$p.value}.
+
+\item Apply \Robject{extest2by2} to data on Example 2, also using the OR as measure of association, but now assuming that data were obtained under a case-control study. Report the $p$-value.
+
+<<p_value_case-control>>=
+source("./extest2by2.R")
+
+test2 <- extest2by2(n1 = m1, n2 = m2, n3 = m3, n4 = m4,
+                    design = "casecontrol",
+                    measure = "or",
+                    alternative = "greater")
+@
+
+The $p$-value using a case-control design is \Sexpr{test2$p.value}.
+
+\item Are the two previous $p$-values expected to be equal? Why? Explain how changing the sampling design in Example 2 from cross-sectional to cohort or to case-control conceptually would affect the $p$-value of the test.
+
+No, they are not expected to be equal because the design samples are different. In the cross-sectional design, there are taken into account all the possible combinations of the four values of the table with the only restriction that those values have to sum the number of people in the experiment. However, in the case-control experiment the restriction is that the sum of each column has to remain the same and, in the cohort experiment, each row has to sum the same. That is why the combinations in each type of experiment will be different, which will cause a different proportion of odds ratio values greater than the initial odds ratio. This means that each $p$-value will be the most probably different.
+
+\end{enumerate}
 
 
 
