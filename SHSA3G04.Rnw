@@ -371,7 +371,7 @@ m3 <- dd[2, 1]
 m4 <- dd[2, 2]
 dd
 
-@.
+@
 
 \begin{enumerate}
 
