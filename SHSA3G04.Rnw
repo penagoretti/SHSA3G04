@@ -44,7 +44,6 @@
     library(mice)
     library(plotrix)
     library(epitools)
-    library(kableExtra)
     
     set.seed(1936)
     @
@@ -163,7 +162,7 @@ estimated that $95\%$ of workers have acceptable levels of the pollutant. A new 
 protocol has been implemented in the factory. Some months after the implementation we
 are interested in know if the percentage of workers with acceptable levels of the pollutant
 is still the same (i.e. $95\%$). To decide, we randomly select a sample of 20 workers resulting
-in the data stored in the file \Robject{factory.RData}.
+in the data stored in the file \Robject{factory.RData}\footnote{See Appendix \ref{app:libraries}.}.
 
 <<data>>=
     
@@ -200,7 +199,7 @@ alpha = 0.05
     \item \textbf{Step 2.} Carry out the experiment and obtain the data.\\
     In the sample of size $n = \Sexpr{n}$, the number of workers that have acceptable levels of pollutant is $k = \Sexpr{k}$.
     \item \textbf{Step 3.} Compute and interpret a measure of distance related to the hypothesis to be contrasted.\\
-    Prevalence of workers that have acceptable levels of pollutant can be estimated as:
+    Prevalence of workers that have acceptable levels of pollutant can be estimated\footnote{See Appendix \ref{app:prevalence_estimation}.} as:
     
 <<prevelance_estimation>>=
 
@@ -239,7 +238,7 @@ using a statistical table for the distribution of interest). Show all your deriv
         P(X = k) = {\Sexpr{n} \choose k } \Sexpr{P}^k \cdot \Sexpr{1-P}^{\Sexpr{n}-k}.
     \end{equation}
 
-    And, also that,
+    And, also that\footnote{See Appendix \ref{app:expectance}.},
 <<Expect_workers>>=
 
 # Number of expected workers that have acceptable levels of pollutant 
@@ -254,11 +253,11 @@ E = n * P
 # Distance between the results observed and expected
 D = k - E
 @
-    Therefore, results at least as favorable to $\text{H}_1$ than those observed are $|X - X_e| \geq |X_o - X_e| = |\Sexpr{k} - \Sexpr{E}| = \Sexpr{D}$, where $X_o$ and $X_e$ are the observed value in the experiment and the expected value under $\text{H}_0$, respectively, and the $p$-value under asymptotic approximation using the normal distribution is:
+    Therefore, results at least as favorable to $\text{H}_1$ than those observed are $|X - X_e| \geq |X_o - X_e| = |\Sexpr{k} - \Sexpr{E}| = \Sexpr{D}$, where $X_o$ and $X_e$ are the observed value in the experiment and the expected value under $\text{H}_0$\footnote{See Appendix \ref{app:results}.}, respectively, and the $p$-value under asymptotic approximation using the normal distribution is:
     \begin{equation}
         X \sim \text{Binomial}(n,\pi) \quad \xRightarrow{\text{asympt.}} \quad \frac{X - n\pi}{\sqrt{n\pi (1 - \pi)}} = Z \sim \mathcal{N}(\mu = 0, \sigma = 1)
     \end{equation}
-    and applying a continuity correction, so that
+    and applying a continuity correction\footnote{See Appendix \ref{app:Normal_calculations}.}, so that
 <<Normal_calculations>>=
 
 # Continuity corrections
@@ -315,7 +314,7 @@ To compute the $p$-value we need to define a random variable related to the meas
     \begin{equation}
         X \sim \text{Binomial}(n,\pi) \quad \xRightarrow{\text{asympt.}} \quad \frac{X - n\pi}{\sqrt{n\pi (1 - \pi)}} = Z \sim \mathcal{N}(\mu = 0, \sigma = 1)
     \end{equation}
-    and applying a continuity correction, so that
+    and applying a continuity correction\footnote{See Appendix \ref{app:R_p_value}.}, so that
 <<R_p_value>>=
 
 # p-value
@@ -360,11 +359,23 @@ Solve Exercise 3 in slides \Robject{SHS 10 Decision making.pdf}.
 %%%
 %%%%%%%%%%%%%%%
 \section{On the impact of the study design on the $p$-value for association in contingency tables}
-Solve Exercise 4 in slides \Robject{SHS 10 Decision making.pdf}.
+Solve Exercise 4 in slides \Robject{SHS 10 Decision making.pdf}\footnote{See Appendix \ref{app:data_ex4}.}.
+<<data_ex4>>=
+## Data from the example 2
+dd0 <- matrix(c(1355, 603, 192, 224, 24, 35, 21, 30), nrow = 4, ncol = 2)
+dd0 <- rbind(colSums(dd0[1:2, ]), colSums(dd0[3:4, ]))
+dd <- round(dd0 / 35)
+m1 <- dd[1, 1]
+m2 <- dd[1, 2]
+m3 <- dd[2, 1]
+m4 <- dd[2, 2]
+dd
+
+@.
 
 \begin{enumerate}
 
-\item Apply \Robject{extest2by2} to data on Example 2 but now using the OR as measure of association. Report the $p$-value.
+\item Apply \Robject{extest2by2} to data on Example 2 but now using the OR as measure of association. Report the $p$-value\footnote{See Appendix \ref{app:p_value_cross-sectional}.}.
 
 <<p_value_cross-sectional>>=
 source("./extest2by2.R")
@@ -377,7 +388,7 @@ test1 <- extest2by2(n1 = m1, n2 = m2, n3 = m3, n4 = m4,
 
 The $p$-value using a cross-sectional design is \Sexpr{test1$p.value}.
 
-\item Apply \Robject{extest2by2} to data on Example 2, also using the OR as measure of association, but now assuming that data were obtained under a case-control study. Report the $p$-value.
+\item Apply \Robject{extest2by2} to data on Example 2, also using the OR as measure of association, but now assuming that data were obtained under a case-control study. Report the $p$-value\footnote{See Appendix \ref{app:p_value_case-control}.}.
 
 <<p_value_case-control>>=
 source("./extest2by2.R")
@@ -410,6 +421,73 @@ No, they are not expected to be equal because the design samples are different. 
 \appendix
 \section{R code}
 \label{app:Rcode}
+
+\subsection{Libraries used and data load}
+\label{app:libraries}
+<<echo=TRUE, eval=FALSE, purl=FALSE>>=
+<<libraries>>
+<<data>>
+@
+
+\subsection{Hypothesis test and $p$-value calculation}
+\subsubsection{Prevalence estimation}
+\label{app:prevalence_estimation}
+
+<<echo=TRUE, eval=FALSE, purl=FALSE>>=
+<<prevelance_estimation>>
+@
+
+\subsubsection{Expectance of workers whit accpetable levels of pollutant}
+\label{app:expectance}
+
+<<echo=TRUE, eval=FALSE, purl=FALSE>>=
+<<Expect_workers>>
+@
+
+\subsubsection{Distance between the results observed and expected}
+\label{app:results}
+
+<<echo=TRUE, eval=FALSE, purl=FALSE>>=
+<<results>>
+@
+
+\subsubsection{Normal distribution calculations by hand}
+\label{app:Normal_calculations}
+
+<<echo=TRUE, eval=FALSE, purl=FALSE>>=
+<<Normal_calculations>>
+@
+
+\subsubsection{Normal distribution calculations by \R}
+\label{app:R_p_value}
+
+<<echo=TRUE, eval=FALSE, purl=FALSE>>=
+<<R_p_value>>
+@
+
+
+\subsection{Load and preparation of data, from the example 2}
+\label{app:data_ex4}
+
+<<echo=TRUE, eval=FALSE, purl=FALSE>>=
+<<data_ex4>>
+@
+
+
+\subsection{Calling the \Robject{extest2by2.R} function under a cross-sectional study.}
+\label{app:p_value_cross-sectional}
+
+<<echo=TRUE, eval=FALSE, purl=FALSE>>=
+<<p_value_cross-sectional>>
+@
+
+
+\subsection{Calling the \Robject{extest2by2.R} function under a case-control study.}
+\label{app:p_value_case-control}
+
+<<echo=TRUE, eval=FALSE, purl=FALSE>>=
+<<p_value_case-control>>
+@
 
 
 
