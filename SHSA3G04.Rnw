@@ -44,6 +44,7 @@
     library(mice)
     library(plotrix)
     library(epitools)
+    library(combinat)
     
     set.seed(1936)
     @
@@ -61,7 +62,7 @@
     ### set global chunk options. They apply to all chunks except to those in which
     ### you set otherwise
     opts_chunk$set(
-      echo = TRUE,         # don't show R input code
+      echo = FALSE,         # don't show R input code
       message = TRUE,       # set to FALSE to avoid nuisance messages (be careful!)         
       warning = TRUE,       # set to FALSE to avoid nuisance messages (be careful!)         
       size = "footnotesize", # set the R output and output font size 
@@ -187,16 +188,23 @@ alpha = 0.05
   \item State clearly the hypothesis test.
   \begin{itemize}
     \item \textbf{Step 1.} State the hypothesis test and set the significance level.\\
-    Define $H_{0}$ and $H_{1}$:
+      Define $H_{0}$ and $H_{1}$:
+      \begin{equation}
+        \begin{cases}
+          \text{$H_{0}$:} & \mbox{The prevalence of workers that have acceptable levels of pollutant is \Sexpr{P}} \\
+          \text{$H_{1}$:} & \mbox{The prevalence of workers that have acceptable levels of pollutant is not \Sexpr{P}} 
+        \end{cases}\\
+      \end{equation}
+      We are going to translate the hypothesis statement into mathematical language:
     \begin{equation}
-        \begin{cases} \text{$H_{0}$:} & \mbox{The prevalence of workers that have acceptable levels of pollutant is \Sexpr{P}} \\ \text{$H_{1}$:} & \mbox{The prevalence of workers that have acceptable levels of pollutant is not \Sexpr{P}} \end{cases}\\
-\end{equation}
-    We are going to translate the hypothesis statement into mathematical language:
-    \begin{equation}
-        \begin{cases} \text{$H_{0}$:} & \mbox{$P(E) = \Sexpr{P}$} \\ \text{$H_{1}$:} & \mbox{$P(E) \not= \Sexpr{P}$} \end{cases}\\
+        \begin{cases}
+          \text{$H_{0}$:} & \mbox{$P(E) = \Sexpr{P}$} \\
+          \text{$H_{1}$:} & \mbox{$P(E) \not= \Sexpr{P}$}
+        \end{cases}\\
     \end{equation}
     We set the significance level, for instance, as usual, $\alpha$ = \Sexpr{alpha}.
-    \item \textbf{Step 2.} Carry out the experiment and obtain the data.\\
+    \item
+      \textbf{Step 2.} Carry out the experiment and obtain the data.\\
     In the sample of size $n = \Sexpr{n}$, the number of workers that have acceptable levels of pollutant is $k = \Sexpr{k}$.
     \item \textbf{Step 3.} Compute and interpret a measure of distance related to the hypothesis to be contrasted.\\
     Prevalence of workers that have acceptable levels of pollutant can be estimated\footnote{See Appendix \ref{app:prevalence_estimation}.} as:
@@ -216,6 +224,38 @@ P_e = k/n
   \item Compute the $p$-value based on the exact distribution of the data under the null hypothesis, using each of the following methods:
   \begin{enumerate}
     \item  By hand (i.e. obtaining the mathematical expression for the $p$-value and then computing its numerical value using \textsf{R} as a simple calculator). Show all your derivations and your \textsf{R} code.
+    
+      In order to achieve this, we will define a random variable related to the measure of distance shown in equation \eqref{eq:prevalence}, and characterize its probability function. Said variable will be X=``Number of workers with acceptable levels of pollutant in a random sample of size n=20'', so that,
+      \begin{equation}
+      X \sim \text{Binomial}(n, \pi) \quad \text{and} \quad P(X = k) = {n \choose k } \pi^k \cdot (1 - \pi)^{n-k}, \quad k = 0, ..., n
+      \end{equation}
+      where $n=20$ and $\pi$ is the unknown prevalence of workers that have acceptable levels of pollutant.
+      
+      We know that, under the null hypothesis $H_0$, $\pi=0.95$, thus
+      \begin{equation}
+      P(X=k)={20\choose k}0.95^k \cdot 0.05^{20-k}
+      \end{equation}
+      and also that\footnote{See Appendix \ref{app:expectance}.},
+<<Expect_workers_2>>=
+
+# Number of expected workers that have acceptable levels of pollutant 
+E = n * P
+@
+    \begin{equation}
+        E(X|\text{H}_0) = n \cdot (\pi|\text{H}_0) = \Sexpr{n} \cdot \Sexpr{P} = \Sexpr{E}
+    \end{equation}  
+    which goes to say, we would expect \Sexpr{E} workers among our sample of size \Sexpr{n} to have acceptable levels of pollutant in a random, while we instead have observed \Sexpr{k} workers that have acceptable levels of pollutant.
+<<results>>=
+
+# Distance between the results observed and expected
+D = abs(E-k)
+@   
+Therefore, results at least as favorable to $\text{H}_1$ than those observed are $|X - X_e| \geq |X_o - X_e| = |\Sexpr{k} - \Sexpr{E}| = \Sexpr{D}$, where $X_o$ and $X_e$ are the observed value in the experiment and the expected value under $\text{H}_0$\footnote{See Appendix \ref{app:results}.}, respectively, and the $p$-value is
+
+  \begin{equation}
+    p=P(|X-\Sexpr{E}|\geq \Sexpr{D}|H_0)
+  \end{equation}
+    
     \item Using the probability distributions in \textsf{R} (i.e. implementing the calculation of
 the $p$-value in an \textsf{R} script, using the proper existing probability function \footnote{\url{
 https://cran.r-project.org/web/views/Distributions.html}}).
@@ -227,7 +267,7 @@ under the null hypothesis, using each of the following methods:
     \item By hand (i.e. obtaining the mathematical expression for the $p$-value and then
 using a statistical table for the distribution of interest). Show all your derivations and your \textsf{R} code.
   
-    To compute the $p$-value we need to define a random variable related to the measure of distance defined in the equation \eqref{eq:prevalence} and characterize its probability function. Consequently, we define $X$ = "Number of workers with acceptable levels of pollutant in a random sample of size n = \Sexpr{n} from the workers population", so that, 
+    To compute the $p$-value we need to define a random variable related to the measure of distance defined in the equation \eqref{eq:prevalence} and characterize its probability function. Consequently, we define $X$ = ``Number of workers with acceptable levels of pollutant in a random sample of size n = \Sexpr{n} from the workers population'', so that, 
     \begin{equation}
         X \sim \text{Binomial}(n, \pi) \quad \text{and} \quad P(X = k) = {n \choose k } \pi^k \cdot (1 - \pi)^{n-k}, \quad k = 0, ..., n,
     \end{equation}
@@ -248,11 +288,7 @@ E = n * P
         E(X|\text{H}_0) = n \cdot (\pi|\text{H}_0) = \Sexpr{n} \cdot \Sexpr{P} = \Sexpr{E}
     \end{equation}
     that is to say, we would expect \Sexpr{E} workers that have acceptable levels of pollutant in a random sample of size \Sexpr{n} while we indeed have observed \Sexpr{k} workers that have acceptable levels of pollutant.
-<<results>>=
-
-# Distance between the results observed and expected
-D = k - E
-@
+    
     Therefore, results at least as favorable to $\text{H}_1$ than those observed are $|X - X_e| \geq |X_o - X_e| = |\Sexpr{k} - \Sexpr{E}| = \Sexpr{D}$, where $X_o$ and $X_e$ are the observed value in the experiment and the expected value under $\text{H}_0$\footnote{See Appendix \ref{app:results}.}, respectively, and the $p$-value under asymptotic approximation using the normal distribution is:
     \begin{equation}
         X \sim \text{Binomial}(n,\pi) \quad \xRightarrow{\text{asympt.}} \quad \frac{X - n\pi}{\sqrt{n\pi (1 - \pi)}} = Z \sim \mathcal{N}(\mu = 0, \sigma = 1)
@@ -347,9 +383,34 @@ R_p_value = 2*(pnorm(Z_inf, mean = 0, sd = 1, lower.tail = T))
 %%%%%%%%%%%%%%%
 \section{Error when using \Robject{extest2by2}}
 \label{sec:error}
-Solve Exercise 3 in slides \Robject{SHS 10 Decision making.pdf}.
+Solve Exercise 3 in slides \Robject{SHS 10 Decision making.pdf}:
+\emph{Check that }\Robject{extest2by2}\emph{ throws an error message when it is 
+applied to the original study data }(N=2,484)\emph{. Read the message and think 
+what can be the cause.}
 
 
+
+Testing the function with the requested data, we can see the error message:
+<<p_value_cross-sectional_error>>=
+source("./extest2by2.R")
+m1 <- 1958
+m2 <- 59
+m3 <- 416
+m4 <- 51
+
+test1 <- extest2by2(n1 = m1, n2 = m2, n3 = m3, n4 = m4,
+                    design = "crosssectional",
+                    measure = "pr",
+                    alternative = "greater")
+@
+The message tells the user that the compiler wasn't able to allocate a vector,
+the size of which is proportional to the total number of cases "N". In short,
+this call to the function \Robject{extest2by2()} calls 
+\Robject{getAllTablescrosssectional()}, which in turn calls 
+\Robject{expand.grid()} to create an R data frame with N to the 4 rows, required
+to perform the test. The reason why we're getting this error is because for 
+large values of N, R fails to create the data frame, since it does not have 
+enough space to do so.
 
 
 
@@ -437,7 +498,7 @@ No, they are not expected to be equal because the design samples are different. 
 <<prevelance_estimation>>
 @
 
-\subsubsection{Expectance of workers whit accpetable levels of pollutant}
+\subsubsection{Expectance of workers with accpetable levels of pollutant}
 \label{app:expectance}
 
 <<echo=TRUE, eval=FALSE, purl=FALSE>>=
