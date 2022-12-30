@@ -185,9 +185,8 @@ alpha = 0.05
 @
 
 \begin{enumerate}
-  \item State clearly the hypothesis test.
-  \begin{itemize}
-    \item \textbf{Step 1.} State the hypothesis test and set the significance level.\\
+  \item State clearly the hypothesis test.\\
+        First, we state the hypothesis test and set the significance level.\\
       Define $H_{0}$ and $H_{1}$:
       \begin{equation}
         \begin{cases}
@@ -202,11 +201,10 @@ alpha = 0.05
           \text{$H_{1}$:} & \mbox{$P(E) \not= \Sexpr{P}$}
         \end{cases}\\
     \end{equation}
-    We set the significance level, for instance, as usual, $\alpha$ = \Sexpr{alpha}.
-    \item
-      \textbf{Step 2.} Carry out the experiment and obtain the data.\\
-    In the sample of size $n = \Sexpr{n}$, the number of workers that have acceptable levels of pollutant is $k = \Sexpr{k}$.
-    \item \textbf{Step 3.} Compute and interpret a measure of distance related to the hypothesis to be contrasted.\\
+    We set the significance level, for instance, as usual, $\alpha$ = \Sexpr{alpha}.\\
+    Then, we carry out the experiment and obtain the data.\\
+    In the sample of size $n = \Sexpr{n}$, the number of workers that have acceptable levels of pollutant is $k = \Sexpr{k}$.\\
+    Finally, we are going to compute and interpret a measure of distance related to the hypothesis to be contrasted.\\
     Prevalence of workers that have acceptable levels of pollutant can be estimated\footnote{See Appendix \ref{app:prevalence_estimation}.} as:
     
 <<prevelance_estimation>>=
@@ -220,7 +218,6 @@ P_e = k/n
       \widehat{P(E)} = \frac{k}{n} = \frac{\Sexpr{k}}{\Sexpr{n}} = \Sexpr{P_e}
     \end{equation}
     We can see that this estimation is higher than the hypothetical value under the null hypothesis, which is 0.95. This discrepancy could be due to the fact that the prevalence of workers that have acceptable levels of pollutant is not the same in both populations. However, it could also be due just to sampling error.
-  \end{itemize}
   \item Compute the $p$-value based on the exact distribution of the data under the null hypothesis, using each of the following methods:
   \begin{enumerate}
     \item  By hand (i.e. obtaining the mathematical expression for the $p$-value and then computing its numerical value using \textsf{R} as a simple calculator). Show all your derivations and your \textsf{R} code.
@@ -390,7 +387,7 @@ what can be the cause.}
 
 
 
-Testing the function with the requested data, we can see the error message:
+Testing the function\footnote{See Appendix \ref{app:p_value_cross-sectional_error}.} with the requested data, we can see the error message:
 <<p_value_cross-sectional_error>>=
 source("./extest2by2.R")
 m1 <- 1958
@@ -526,6 +523,12 @@ No, they are not expected to be equal because the design samples are different. 
 <<R_p_value>>
 @
 
+\subsection{Calling the \Robject{extest2by2.R} function that throws an error message}
+\label{app:p_value_cross-sectional_error}
+
+<<echo=TRUE, eval=FALSE, purl=FALSE>>=
+<<p_value_cross-sectional_error>>
+@
 
 \subsection{Load and preparation of data, from the example 2}
 \label{app:data_ex4}
