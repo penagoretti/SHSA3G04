@@ -379,10 +379,9 @@ R_p_value = 2*(pnorm(Z_inf, mean = 0, sd = 1, lower.tail = T))
 
   \end{enumerate}
   \item Compare results and discuss (in no more than 10 lines).
+  
+  We can observe that the calculations from subsections 1.2 and 1.3 differ slightly: using the asymptotic distribution of the data seems to induce some error onto our estimates, when compared with the p-values obtained based on the exact distribution of the data. Nonetheless, both approximations are similar enough to suggest the same conclusions: a $p$-value much larger than our $\alpha$ threshold indicates that the null hypothesis cannot be rejected with certainty, since the test's results are not significant. We cannot assume that the prevalence of the pollutant estimated on a sample of 20 workers is a good approximate of the prevalence on the general population (i.e. the rest of the workforce).
 \end{enumerate}
-
-
-
 
 %%%%%%%%%%%%%%%
 %%%
