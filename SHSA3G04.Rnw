@@ -217,7 +217,7 @@ P_e = k/n
       \widehat{P(E)} = \frac{k}{n} = \frac{\Sexpr{k}}{\Sexpr{n}} = \Sexpr{P_e}
     \end{equation}
     We can see that this estimation is higher than the hypothetical value under the null hypothesis, which is \Sexpr{P}. This discrepancy could be due to the fact that the prevalence of workers that have acceptable levels of pollutant is not the same in both populations. However, it could also be due just to sampling error.
-  \item Compute the $p$-value based on the exact distribution of the data under the null hypothesis, using each of the following methods:
+  \item\label{subsec:2} Compute the $p$-value based on the exact distribution of the data under the null hypothesis, using each of the following methods:
   \begin{enumerate}
     \item  By hand (i.e. obtaining the mathematical expression for the $p$-value and then computing its numerical value using \textsf{R} as a simple calculator). Show all your derivations and your \textsf{R} code.
     
@@ -273,7 +273,7 @@ pVal2<-1-dbinom(x=19,size=20,prob=0.95)
 @
 Following this approach, we obtain a $p$-value of \Sexpr{pVal2}.
   \end{enumerate}
-  \item Compute the $p$-value based on the approximated asymptotic distribution of the data
+  \item\label{subsec:3} Compute the $p$-value based on the approximated asymptotic distribution of the data
 under the null hypothesis, using each of the following methods:
   \begin{enumerate}
     \item By hand (i.e. obtaining the mathematical expression for the $p$-value and then
@@ -380,7 +380,7 @@ R_p_value = 2*(pnorm(Z_inf, mean = 0, sd = 1, lower.tail = T))
   \end{enumerate}
   \item Compare results and discuss (in no more than 10 lines).
   
-  We can observe that the calculations from subsections 1.2 and 1.3 differ slightly: using the asymptotic distribution of the data seems to induce some error onto our estimates, when compared with the p-values obtained based on the exact distribution of the data. Nonetheless, both approximations are similar enough to suggest the same conclusions: a $p$-value much larger than our $\alpha$ threshold indicates that the null hypothesis cannot be rejected with certainty, since the test's results are not significant. We cannot assume that the prevalence of the pollutant estimated on a sample of 20 workers is a good approximate of the prevalence on the general population (i.e. the rest of the workforce).
+  We can observe that the calculations from subsections \ref{subsec:2} and \ref{subsec:3} differ slightly: using the asymptotic distribution of the data seems to induce some error onto our estimates, when compared with the p-values obtained based on the exact distribution of the data. Nonetheless, both approximations are similar enough to suggest the same conclusions: a $p$-value much larger than our $\alpha$ threshold indicates that the null hypothesis cannot be rejected with certainty, since the test's results are not significant. We cannot assume that the prevalence of the pollutant estimated on a sample of 20 workers is a good approximate of the prevalence on the general population (i.e. the rest of the workforce).
 \end{enumerate}
 
 %%%%%%%%%%%%%%%
