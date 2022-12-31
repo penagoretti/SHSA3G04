@@ -186,8 +186,7 @@ alpha = 0.05
 
 \begin{enumerate}
   \item State clearly the hypothesis test.\\
-        First, we state the hypothesis test and set the significance level.\\
-      Define $H_{0}$ and $H_{1}$:
+        First, we state the hypothesis test and set the significance level. Define $H_{0}$ and $H_{1}$:
       \begin{equation}
         \begin{cases}
           \text{$H_{0}$:} & \mbox{The prevalence of workers that have acceptable levels of pollutant is \Sexpr{P}} \\
@@ -202,10 +201,8 @@ alpha = 0.05
         \end{cases}\\
     \end{equation}
     We set the significance level, for instance, as usual, $\alpha$ = \Sexpr{alpha}.\\
-    Then, we carry out the experiment and obtain the data.\\
-    In the sample of size $n = \Sexpr{n}$, the number of workers that have acceptable levels of pollutant is $k = \Sexpr{k}$.\\
-    Finally, we are going to compute and interpret a measure of distance related to the hypothesis to be contrasted.\\
-    Prevalence of workers that have acceptable levels of pollutant can be estimated\footnote{See Appendix \ref{app:prevalence_estimation}.} as:
+    Then, we carry out the experiment and obtain the data. In the sample of size $n = \Sexpr{n}$, the number of workers that have acceptable levels of pollutant is $k = \Sexpr{k}$.\\
+    Finally, we are going to compute and interpret a measure of distance related to the hypothesis to be contrasted.Prevalence of workers that have acceptable levels of pollutant can be estimated\footnote{See Appendix \ref{app:prevalence_estimation}.} as:
     
 <<prevelance_estimation>>=
 
@@ -217,7 +214,7 @@ P_e = k/n
     \label{eq:prevalence}
       \widehat{P(E)} = \frac{k}{n} = \frac{\Sexpr{k}}{\Sexpr{n}} = \Sexpr{P_e}
     \end{equation}
-    We can see that this estimation is higher than the hypothetical value under the null hypothesis, which is 0.95. This discrepancy could be due to the fact that the prevalence of workers that have acceptable levels of pollutant is not the same in both populations. However, it could also be due just to sampling error.
+    We can see that this estimation is higher than the hypothetical value under the null hypothesis, which is \Sexpr{P}. This discrepancy could be due to the fact that the prevalence of workers that have acceptable levels of pollutant is not the same in both populations. However, it could also be due just to sampling error.
   \item Compute the $p$-value based on the exact distribution of the data under the null hypothesis, using each of the following methods:
   \begin{enumerate}
     \item  By hand (i.e. obtaining the mathematical expression for the $p$-value and then computing its numerical value using \textsf{R} as a simple calculator). Show all your derivations and your \textsf{R} code.
@@ -226,14 +223,14 @@ P_e = k/n
       \begin{equation}
       X \sim \text{Binomial}(n, \pi) \quad \text{and} \quad P(X = k) = {n \choose k } \pi^k \cdot (1 - \pi)^{n-k}, \quad k = 0, ..., n
       \end{equation}
-      where $n=20$ and $\pi$ is the unknown prevalence of workers that have acceptable levels of pollutant.
+      where $n = \Sexpr{20}$ and $\pi$ is the unknown prevalence of workers that have acceptable levels of pollutant.
       
-      We know that, under the null hypothesis $H_0$, $\pi=0.95$, thus
+      We know that, under the null hypothesis $\text{H}_0$, $\pi = \Sexpr{P}$, thus
       \begin{equation}
-      P(X=k)={20\choose k}0.95^k \cdot 0.05^{20-k}
+        P(X = k) = {\Sexpr{n} \choose k } \Sexpr{P}^k \cdot \Sexpr{1-P}^{\Sexpr{n}-k}.
       \end{equation}
       and also that\footnote{See Appendix \ref{app:expectance}.},
-<<Expect_workers_2>>=
+<<Expect_workers>>=
 
 # Number of expected workers that have acceptable levels of pollutant 
 E = n * P
@@ -276,11 +273,7 @@ using a statistical table for the distribution of interest). Show all your deriv
     \end{equation}
 
     And, also that\footnote{See Appendix \ref{app:expectance}.},
-<<Expect_workers>>=
-
-# Number of expected workers that have acceptable levels of pollutant 
-E = n * P
-@
+    
     \begin{equation}
         E(X|\text{H}_0) = n \cdot (\pi|\text{H}_0) = \Sexpr{n} \cdot \Sexpr{P} = \Sexpr{E}
     \end{equation}
