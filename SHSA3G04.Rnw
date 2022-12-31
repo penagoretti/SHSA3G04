@@ -254,7 +254,7 @@ p\text{-value}=f_X(20)+\sum_{i=1}^{18}f_X(i)
 Where $f_X(k)$ is the probability density function (PDF) of our random variable 
 $X$, which, under the null hypothesis, $X \sim \text{Binomial}(n=20,\pi=0.95)$.
 From the definition of PDF, and knowing the PDF of random variables with Binomial
-distributions, we can simplify
+distributions, we can simplify\footnote{See Appendix \ref{app:p_value_exact_hand}.}
 <<>>=
 pVal<-1-nchoosek(20,19)*0.95^19*0.05
 @
@@ -518,6 +518,13 @@ No, they are not expected to be equal because the design samples are different. 
 
 <<echo=TRUE, eval=FALSE, purl=FALSE>>=
 <<results>>
+@
+
+\subsubsection{Binomial distribution calculations by hand}
+\label{app:p_value_exact_hand}
+
+<<echo=TRUE, eval=FALSE, purl=FALSE>>=
+<<p_value_exact_hand>>
 @
 
 \subsubsection{Normal distribution calculations by hand}
