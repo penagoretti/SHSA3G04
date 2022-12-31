@@ -45,6 +45,7 @@
     library(plotrix)
     library(epitools)
     library(combinat)
+    library(pracma)
     
     set.seed(1936)
     @
@@ -253,9 +254,55 @@ D = abs(E-k)
 Therefore, results at least as favorable to $\text{H}_1$ than those observed are $|X - X_e| \geq |X_o - X_e| = |\Sexpr{k} - \Sexpr{E}| = \Sexpr{D}$, where $X_o$ and $X_e$ are the observed value in the experiment and the expected value under $\text{H}_0$\footnote{See Appendix \ref{app:results}.}, respectively, and the $p$-value is
 
   \begin{equation}
-    p=P(|X-\Sexpr{E}|\geq \Sexpr{D}|H_0)
+    p\text{-value}=P(|X-\Sexpr{E}|\geq \Sexpr{D}|H_0)=
+    P(|X-\Sexpr{E}|\geq \Sexpr{D}|X\sim\text{Binomial} (n=\Sexpr{n},\pi = 0.95))
   \end{equation}
-    
+  Or, equivalently,
+  \begin{equation}
+  \begin{split}
+    p\text{-value}&=P(\{X-\Sexpr{E}\geq \Sexpr{D}\}\cup \{\Sexpr{E}-X\geq \Sexpr{D}\})\\
+    &=P(\{X\geq \Sexpr{E+D}\}\cup \{X\leq\Sexpr{E-D}\})\\
+    &=P(X\geq \Sexpr{E+D})+ P(X\leq\Sexpr{E-D})\\
+    &=1-P(X\leq \Sexpr{E+D})+P(X\leq\Sexpr{E-D})
+    \end{split}
+  \end{equation}
+  where $X\sim\text{Binomial}(n=\Sexpr{n}, \pi=0.95)$. Using the definition of the Cumulative Density Function (or CDF for short), and assuming that X has a Binomial Distribution with the parameters stated above, we know
+  \begin{equation}
+  P(X \leq k)=\sum_{i=0}^k{\Sexpr{n}\choose i} 0.95^{i}(0.05)^{\Sexpr{n}-i}
+  \end{equation}
+  being $k$ an integer. Thus,
+  \begin{equation}\begin{split}
+  p\text{-value}
+  &=1-\sum_{i=0}^{20} {\Sexpr{n}\choose i} 0.95^{i}(0.05)^{\Sexpr{n}-i}+
+  \sum_{i=0}^{18}{\Sexpr{n}\choose i} 0.95^{i}(0.05)^{\Sexpr{n}-i}\\
+  \end{split}\end{equation}
+<<pValCalc>>=
+p<-0.95
+p_<-1-p
+s1<-0
+k1<-20
+for(i in 0:k1){
+  s1<-s1+nchoosek(n,i)*p^i*p_^(n-i)
+}
+s2<-0
+k2<-18
+for(i in 0:k2){
+  s2<-s2+nchoosek(n,i)*p^i*p_^(n-i)
+}
+
+pVal<- 1 - s1 + s2 
+
+@
+
+<<>>=
+#El p-valor debería dar esto: 
+# P(X>=20)+P(X<=18)=0.35848592+0.26416047=0.62
+#pero da 0.26. WTF? Q estoy haciendo mal?
+@
+
+
+
+
     \item Using the probability distributions in \textsf{R} (i.e. implementing the calculation of
 the $p$-value in an \textsf{R} script, using the proper existing probability function \footnote{\url{
 https://cran.r-project.org/web/views/Distributions.html}}).
