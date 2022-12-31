@@ -37,7 +37,7 @@
     
     <<libraries, include=FALSE>>=
       ### libraries used:
-      library(knitr)
+    library(knitr)
     library(highlight)  # to highlight R output
     library(xtable)     # to export R output tables to LaTeX
     library(here)
@@ -46,6 +46,7 @@
     library(epitools)
     library(combinat)
     library(pracma)
+    library(stats)
     
     set.seed(1936)
     @
@@ -265,6 +266,12 @@ p\text{-value}=1-f_X(19)=1-{20\choose 19}0.95^{19}0.05=\Sexpr{pVal}
 the $p$-value in an \textsf{R} script, using the proper existing probability function \footnote{\url{
 https://cran.r-project.org/web/views/Distributions.html}}).
 Show your \textsf{R} script and the output.
+
+Calculating the $p$-value using \textsf{R}'s pre-existing functions, we will use the same reasoning as above, but we won't have to implement the variable's PDF by hand
+<<echo=TRUE>>=
+pVal2<-1-dbinom(x=19,size=20,prob=0.95)
+@
+Following this approach, we obtain a $p$-value of \Sexpr{pVal2}.
   \end{enumerate}
   \item Compute the $p$-value based on the approximated asymptotic distribution of the data
 under the null hypothesis, using each of the following methods:
